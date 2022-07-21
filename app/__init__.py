@@ -23,8 +23,18 @@ def home():
 def github():
     if request.headers['Content-Type']=='application/json':
         print("Here : ",request.json)
+
+        # Serializing json
+        json_object = json.dumps(request.json, indent=4)
+        
+        # Writing to sample.json
+        with open("sample.json", "w") as outfile:
+            outfile.write(json_object)
+
         return json.dumps(request.json)
     return "hello"
+
+
 
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'])
