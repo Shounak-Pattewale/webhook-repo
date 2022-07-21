@@ -1,3 +1,4 @@
+import json
 from flask import Flask, request
 from config import DefaultConfig
 from .webhooks import services
