@@ -8,4 +8,4 @@ class WebhooksData(db.EmbeddedDocument):
     action = db.StringField()
     from_branch = db.StringField()
     to_branch = db.StringField()
-    timestamp = db.DateTimeField()
+    timestamp = db.StringField()

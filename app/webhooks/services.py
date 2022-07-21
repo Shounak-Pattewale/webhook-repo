@@ -7,24 +7,29 @@ from mongoengine.errors import FieldDoesNotExist, ValidationError, DoesNotExist
 from app.basic_errors import InternalServerError, SchemaValidationError, NoAuthorizationError
 from app.webhooks.models import *
 
-# class BasicBlogsApi(Resource):
-#     def get(self):
-#         try:
-#             return jsonify(Blogs.objects())
-#         except NoAuthorizationError:
-#             raise NoAuthorizationError
+class GithubData:
+    def __init__(self):
+        pass
 
-#     def post(self):
-#         try:
-#             body = request.get_json()
-#             datetime_now = datetime.utcnow()
-#             body['created_on'] = datetime_now
-#             body['modified_on'] = datetime_now
-#             blog = Blogs(**body).save()
-#             blog.save()
-#             id = blog.id
-#             return {'id': str(id)}, const.status_created_201
-#         except (FieldDoesNotExist, ValidationError):
-#             raise SchemaValidationError
-#         except Exception:
-#             raise InternalServerError
+    def get():
+        try:
+            return jsonify(WebhooksData.objects())
+        except NoAuthorizationError:
+            raise NoAuthorizationError
+
+    def push(data,action):
+        try:
+            if action=='push':
+                body['request_id'] = data['id']
+                body['author'] = data['name']
+                body['action'] = action
+                body['from_branch'] = ''
+                body['to_branch'] = ''
+                body['timestamp'] = data['timestamp']
+                webhook = WebhooksData(**body).save()
+                print("ID : ",str(webhook.id))
+                return {'id': str(webhook.id)}, const.status_created_201
+        except (FieldDoesNotExist, ValidationError):
+            raise SchemaValidationError
+        except Exception:
+            raise InternalServerError

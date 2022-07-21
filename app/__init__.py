@@ -1,7 +1,7 @@
 import json
 from flask import Flask, request
 from config import DefaultConfig
-from .webhooks import services
+from .webhooks.services import GithubData
 
 app = Flask(__name__)
 
@@ -19,10 +19,11 @@ app.config['MONGODB_SETTINGS'] = {
 def home():
     return "Success"
 
-@app.post("/github")
-def github():
+@app.post("/github_push")
+def github_push():
     if request.headers['Content-Type']=='application/json':
-        print("Here : ",request.json)
+        data = request.json
+        GithubData.push(data['head_commit'], 'push')
 
         # Serializing json
         json_object = json.dumps(request.json, indent=4)
