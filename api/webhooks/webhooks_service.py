@@ -1,11 +1,11 @@
 import json
 
 from flask import Response, request, jsonify
-# from flask_restful import Resource
 from mongoengine.errors import FieldDoesNotExist, ValidationError, DoesNotExist
 
-from app.basic_errors import InternalServerError, SchemaValidationError, NoAuthorizationError
-from app.webhooks.models import *
+from api.basic_errors import InternalServerError, SchemaValidationError, NoAuthorizationError
+from api.webhooks.webhooks_model import *
+
 
 class GithubData:
     def __init__(self):
@@ -20,8 +20,9 @@ class GithubData:
     def push(data,action):
         try:
             if action=='push':
+                body = {}
                 body['request_id'] = data['id']
-                body['author'] = data['name']
+                body['author'] = data['author']['name']
                 body['action'] = action
                 body['from_branch'] = ''
                 body['to_branch'] = ''

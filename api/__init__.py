@@ -1,14 +1,13 @@
-import json
-from flask import Flask, request
+from flask import Flask
+
 from config import DefaultConfig
-from .webhooks.services import GithubData
+from api.webhooks.webhooks_service import *
 
 app = Flask(__name__)
 
 # Load default configuration for the application (common across environments)
 app.config.from_object(DefaultConfig)
 
-# Db config settings
 app.config['MONGODB_SETTINGS'] = {
     'db': app.config['DB_NAME'],
     'host': app.config['DB_URI'],
@@ -27,14 +26,13 @@ def github_push():
 
         # Serializing json
         json_object = json.dumps(request.json, indent=4)
-        
         # Writing to sample.json
         with open("sample.json", "w") as outfile:
             outfile.write(json_object)
 
         return json.dumps(request.json)
-    return "hello"
 
+    return const.status_badrequest_400
 
 
 if __name__ == '__main__':

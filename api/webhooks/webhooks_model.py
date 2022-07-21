@@ -1,8 +1,7 @@
-import const
 from datetime import datetime
 from db import db
 
-class WebhooksData(db.EmbeddedDocument):
+class WebhooksData(db.Document):
     request_id = db.StringField()
     author = db.StringField()
     action = db.StringField()
