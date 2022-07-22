@@ -5,23 +5,19 @@
 
 <div class="container p-4">
     <div class="card">
-    <div class="ptable-responsive card-body">
-        <table class="table table-bordered table-light table-striped table-hover align-middle " style="text-align: center;">
-            <thead>
-                <tr>
-                <th scope="col">Request Id</th>
-                <th scope="col">Author</th>
-                <th scope="col">Action</th>
-                <th scope="col">Branch Flow</th>
-                <th scope="col">Date</th>
-                <th scope="col">Time</th>
-                </tr>
-            </thead>
-            <tbody id="data">
-                
-            </tbody>
+        <div class="table-responsive card-body">
+            <table class="table table-bordered table-light table-striped table-hover align-middle"
+                style="text-align: start;">
+                <thead>
+                    <tr>
+                        <th scope="col" colspan="5">Github Webhooks History</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+
+                </tbody>
             </table>
-    </div>
+        </div>
     </div>
 </div>
 
@@ -30,31 +26,41 @@
 {% block script %}
 
 <script>
-// Async function call; populating tables 
-async function getData(){
-     const response = await fetch(window.origin+"/get")
-     const data = await response.json();
-     length = data.length;
-     var temp = "";
-     
-     for(i = 0; i < length; i++)
-     {  const d = new Date(data[i].timestamp);
-        temp+="<tr>";
-        temp+="<td>"+data[i].request_id+"</td>";
-        temp+="<td>"+data[i].author+"</td>";
-        temp+="<td>"+data[i].action+"</td>";
-        temp+="<td>"+data[i].from_branch+" -> "+data[i].to_branch+"</td>";
-        temp+="<td>"+d.toDateString();+"</td>";
-        temp+="<td>"+d.toTimeString();+"</td>";
-     }
+    // Async function call; populating tables 
+    async function getData() {
+        const response = await fetch(window.origin + "/get")
+        const data = await response.json();
+        length = data.length;
+        var temp = "";
 
-  document.getElementById("data").innerHTML = temp;
-   }
+        for (i = 0; i < length; i++) {
+            const d = new Date(data[i].timestamp);
 
-getData();
+            temp += "<tr>";
+            if (data[i].action == "PUSH") {
+                
+                temp += "<td colspan='5'>" + data[i].author +" pushed to "+ data[i].to_branch + " on " + d.toDateString() + "-";
+                temp += d.toTimeString() + "</td>";
+   
+            } else if (data[i].action == "PULL_REQUEST") {
 
-// Re-fetching data after 15 sec of interval
-setInterval(getData,15000)
+                temp += "<td colspan='5'>" + data[i].author +" submitted a pull request from "+ data[i].from_branch + " to ";
+                temp += data[i].to_branch + " on " + d.toDateString() + "-" + d.toTimeString() + "</td>";
+
+            } else {
+
+                temp += "<td colspan='5'>" + data[i].author + " merged " + data[i].from_branch + " to ";
+                temp += data[i].to_branch + " on " + d.toDateString() + "-" + d.toTimeString() + "</td>";
+            }
+        }
+
+        document.getElementById("data").innerHTML = temp;
+    }
+
+    getData();
+
+    // Re-fetching data after 15 sec of interval
+    setInterval(getData, 15000)
 </script>
 
 {% endblock %}

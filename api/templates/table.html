@@ -1,0 +1,55 @@
+{% extends 'base_template.html' %} {% block title %} Table {% endblock %} {%
+block main %}
+
+<div class="container p-4">
+    <div class="card">
+        <div class="table-responsive card-body">
+            <table class="table table-bordered table-light table-striped table-hover align-middle"
+                style="text-align: center">
+                <thead>
+                    <tr>
+                        <th scope="col">Request Id</th>
+                        <th scope="col">Author</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">Branch Flow</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                <tbody id="data"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %} {% block script %}
+
+<script>
+    // Async function call; populating tables
+    async function getData() {
+        const response = await fetch(window.origin + "/get");
+        const data = await response.json();
+        length = data.length;
+        var temp = "";
+
+        for (i = 0; i < length; i++) {
+            const d = new Date(data[i].timestamp);
+            temp += "<tr>";
+            temp += "<td>" + data[i].request_id + "</td>";
+            temp += "<td>" + data[i].author + "</td>";
+            temp += "<td>" + data[i].action + "</td>";
+            temp += "<td>" + data[i].from_branch + " -> " + data[i].to_branch + "</td>";
+            temp += "<td>" + d.toDateString(); + "</td>";
+            temp += "<td>" + d.toTimeString(); + "</td>";
+        }
+
+        document.getElementById("data").innerHTML = temp;
+    }
+
+    getData();
+
+    // Re-fetching data after 15 sec of interval
+    setInterval(getData, 15000);
+</script>
+
+{% endblock %}

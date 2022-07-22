@@ -21,6 +21,14 @@ def home():
     except Exception as error:
         return error
 
+# Output in tabular format
+@app.get('/table')
+def table():
+    try:
+        return render_template('table.html')
+    except Exception as error:
+        return error
+
 # Fetching data from db
 @app.get('/get')
 def get():
