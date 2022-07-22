@@ -16,24 +16,34 @@ app.config['MONGODB_SETTINGS'] = {
 
 @app.get('/')
 def home():
-    return "Success"
+    return GithubData.get()
 
 @app.post("/github_push")
 def github_push():
-    if request.headers['Content-Type']=='application/json':
-        data = request.json
-        GithubData.push(data['head_commit'], 'push')
+    try:
+        if request.headers['Content-Type']=='application/json':
 
-        # Serializing json
-        json_object = json.dumps(request.json, indent=4)
-        # Writing to sample.json
-        with open("sample.json", "w") as outfile:
-            outfile.write(json_object)
+            data = request.json
 
-        return json.dumps(request.json)
+            return GithubData.put(data, 'PUSH')
+        return {'Response' : 'Bad Request'},const.status_badrequest_400
 
-    return const.status_badrequest_400
+    except Exception as error:
+        return error
 
+
+@app.post("/github_pull_request")
+def github_pull_request():
+    try:
+        if request.headers['Content-Type']=='application/json':
+
+            data = request.json
+
+            return GithubData.put(data, 'PULL_REQUEST')
+        return {'Response' : 'Bad Request'},const.status_badrequest_400
+    
+    except Exception as error:
+        return error
 
 if __name__ == '__main__':
     app.run(debug=app.config['DEBUG'])
