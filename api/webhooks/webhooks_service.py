@@ -23,7 +23,8 @@ class GithubData:
 
     def get():
         try:
-            return jsonify(WebhooksData.objects())
+            # Fetching latest 15 entries
+            return jsonify(WebhooksData.objects.order_by('-_id').limit(15))
         except NoAuthorizationError:
             raise NoAuthorizationError
 

@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, url_for, render_template
 import const as const
 from config import DefaultConfig
 from api.webhooks.webhooks_service import *
@@ -16,7 +16,18 @@ app.config['MONGODB_SETTINGS'] = {
 
 @app.get('/')
 def home():
-    return GithubData.get()
+    try:
+        return render_template('home.html')
+    except Exception as error:
+        return error
+
+# Fetching data from db
+@app.get('/get')
+def get():
+    try:
+        return GithubData.get()
+    except Exception as error:
+        return error
 
 @app.post("/github_push")
 def github_push():
