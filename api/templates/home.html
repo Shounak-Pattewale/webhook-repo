@@ -26,7 +26,7 @@
 {% block script %}
 
 <script>
-    // Async function call; populating tables 
+    // Async function call; populating data
     async function getData() {
         const response = await fetch(window.origin + "/get")
         const data = await response.json();

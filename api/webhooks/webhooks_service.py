@@ -14,7 +14,7 @@ from api.webhooks.webhooks_model import *
 # then : merged_by.login, merged_at, head.ref -> base.ref 
 
 # Pull_request
-# if : pull_request.state=="open" and merged=="true" (mergeable==true)
+# if : pull_request.state=="open" and merged=="false" (mergeable==true)
 # then : pull_request.user.login, created_at, head.ref -> base.ref 
 
 class GithubData:

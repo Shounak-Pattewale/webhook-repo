@@ -37,6 +37,7 @@ def get():
     except Exception as error:
         return error
 
+# Webhook endpoint for Push Action
 @app.post("/github_push")
 def github_push():
     try:
@@ -50,7 +51,7 @@ def github_push():
     except Exception as error:
         return error
 
-
+# Webhook endpoint for Pull Request Action
 @app.post("/github_pull_request")
 def github_pull_request():
     try:
