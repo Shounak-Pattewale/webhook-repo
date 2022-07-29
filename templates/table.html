@@ -12,8 +12,8 @@ block main %}
                         <th scope="col">Author</th>
                         <th scope="col">Action</th>
                         <th scope="col">Branch Flow</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Time</th>
+                        <th scope="col">Date-Time</th>
+                        <!-- <th scope="col">Time</th> -->
                     </tr>
                 </thead>
                 <tbody id="data"></tbody>
@@ -27,7 +27,7 @@ block main %}
 <script>
     // Async function call; populating table
     async function getData() {
-        const response = await fetch(window.origin + "/get");
+        const response = await fetch(window.origin + "/api/get");
         const data = await response.json();
         length = data.length;
         var temp = "";
@@ -39,8 +39,7 @@ block main %}
             temp += "<td>" + data[i].author + "</td>";
             temp += "<td>" + data[i].action + "</td>";
             temp += "<td>" + data[i].from_branch + " -> " + data[i].to_branch + "</td>";
-            temp += "<td>" + d.toDateString(); + "</td>";
-            temp += "<td>" + d.toTimeString(); + "</td>";
+            temp += "<td>" + d.toUTCString(); + "</td>";
         }
 
         document.getElementById("data").innerHTML = temp;

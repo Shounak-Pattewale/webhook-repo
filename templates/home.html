@@ -28,7 +28,7 @@
 <script>
     // Async function call; populating data
     async function getData() {
-        const response = await fetch(window.origin + "/get")
+        const response = await fetch(window.origin + "/api/get")
         const data = await response.json();
         length = data.length;
         var temp = "";
@@ -39,18 +39,17 @@
             temp += "<tr>";
             if (data[i].action == "PUSH") {
                 
-                temp += "<td colspan='5'>" + data[i].author +" pushed to "+ data[i].to_branch + " on " + d.toDateString() + "-";
-                temp += d.toTimeString() + "</td>";
+                temp += "<td colspan='5'>" + data[i].author +" pushed to "+ data[i].to_branch + " on " + d.toUTCString() + "</td>";
    
             } else if (data[i].action == "PULL_REQUEST") {
 
                 temp += "<td colspan='5'>" + data[i].author +" submitted a pull request from "+ data[i].from_branch + " to ";
-                temp += data[i].to_branch + " on " + d.toDateString() + "-" + d.toTimeString() + "</td>";
+                temp += data[i].to_branch + " on " + d.toUTCString() + "</td>";
 
             } else {
 
                 temp += "<td colspan='5'>" + data[i].author + " merged " + data[i].from_branch + " to ";
-                temp += data[i].to_branch + " on " + d.toDateString() + "-" + d.toTimeString() + "</td>";
+                temp += data[i].to_branch + " on " + d.toUTCString() + "</td>";
             }
         }
 

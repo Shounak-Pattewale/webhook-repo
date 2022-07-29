@@ -1,4 +1,3 @@
-from datetime import datetime
 from db import db
 
 action_choices = ('PUSH','PULL_REQUEST','MERGE')
