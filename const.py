@@ -9,7 +9,7 @@ flask_env_production = "production"
 response_message_key = "message"
 response_status_key = "status"
 
-# Http response statuses codes
+# HTTP response statuses codes
 
 # successful responses - 2xx
 status_ok_200 = 200
@@ -24,5 +24,6 @@ status_notfound_404 = 404
 # server side errors
 status_internal_server_error_500 = 500
 
+# pagination
 records_per_page = int(os.environ.get('RECORDS_PER_PAGE'))
 pagination_btn_length = int(os.environ.get('PAGINATION_BTN_LENGTH'))
