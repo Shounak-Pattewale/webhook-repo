@@ -9,7 +9,8 @@ api = Blueprint('api', __name__, template_folder='templates', static_folder='sta
 def get():
     try:
         page = request.args.get('page', 1, type=int)
-        return jsonify(GithubData.get(page).items)
+        res = GithubData.get(page)
+        return jsonify({'data':res.items, 'total_pages':res.pages})
     except Exception as error:
         return error
 

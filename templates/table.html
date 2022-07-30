@@ -34,31 +34,6 @@
     // Declaring jinja variable
     var jinjaData = $('#my-data').data();
 
-    // Async function call; populating table
-    async function getData() {
-        const response = await fetch(window.origin + "/api/get");
-        const data = await response.json();
-        length = data.length;
-        var temp = "";
-
-        for (i = 0; i < length; i++) {
-            const d = new Date(data[i].timestamp);
-            temp += "<tr>";
-            temp += "<td>" + data[i].request_id + "</td>";
-            temp += "<td>" + data[i].author + "</td>";
-            temp += "<td>" + data[i].action + "</td>";
-            temp += "<td>" + data[i].from_branch + " -> " + data[i].to_branch + "</td>";
-            temp += "<td>" + d.toUTCString(); + "</td>";
-        }
-
-        document.getElementById("data").innerHTML = temp;
-    }
-
-    getData();
-
-    // Re-fetching data after 15 sec of interval
-    setInterval(getData, 15000);
-
     // Pagination
     function pageButtons(pages) {
         var wrapper = document.getElementById('pagination-wrapper')
@@ -101,11 +76,37 @@
         } else if (jinjaData.current_page == pages) {
             wrapper.innerHTML += `<a value=${pages} class="btn btn-light mx-1 disabled " href="?page=${jinjaData.total_pages}">Last &#187;</a>`
         }
-
     }
 
-    pageButtons(jinjaData.total_pages)
-    
+    // Async function call; populating table
+    async function getData() {
+        const response = await fetch(window.origin + "/api/get?page=" + jinjaData.current_page);
+        var data = await response.json();
+        jinjaData.total_pages = data['total_pages']
+        data = data['data']
+        length = data.length;
+        var temp = "";
+
+        for (i = 0; i < length; i++) {
+            const d = new Date(data[i].timestamp);
+            temp += "<tr>";
+            temp += "<td>" + data[i].request_id + "</td>";
+            temp += "<td>" + data[i].author + "</td>";
+            temp += "<td>" + data[i].action + "</td>";
+            temp += "<td>" + data[i].from_branch + " -> " + data[i].to_branch + "</td>";
+            temp += "<td>" + d.toUTCString(); + "</td>";
+        }
+
+        document.getElementById("data").innerHTML = temp;
+
+        pageButtons(jinjaData.total_pages)
+    }
+
+    getData();
+
+    // Re-fetching data after 15 sec of interval
+    setInterval(getData, 15000);
+
 </script>
 
 {% endblock %}

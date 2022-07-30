@@ -34,41 +34,6 @@
     // Declaring jinja variable
     var jinjaData = $('#my-data').data();
 
-    // Async function call; populating data
-    async function getData() {
-        const response = await fetch(window.origin + "/api/get?page=" + jinjaData.current_page)
-        const data = await response.json();
-        length = data.length;
-        var temp = "";
-
-        for (i = 0; i < length; i++) {
-            const d = new Date(data[i].timestamp);
-
-            temp += "<tr>";
-            if (data[i].action == "PUSH") {
-
-                temp += "<td colspan='5'>" + data[i].author + " pushed to " + data[i].to_branch + " on " + d.toUTCString() + "</td>";
-
-            } else if (data[i].action == "PULL_REQUEST") {
-
-                temp += "<td colspan='5'>" + data[i].author + " submitted a pull request from " + data[i].from_branch + " to ";
-                temp += data[i].to_branch + " on " + d.toUTCString() + "</td>";
-
-            } else {
-
-                temp += "<td colspan='5'>" + data[i].author + " merged " + data[i].from_branch + " to ";
-                temp += data[i].to_branch + " on " + d.toUTCString() + "</td>";
-            }
-        }
-
-        document.getElementById("data").innerHTML = temp;
-    }
-
-    getData();
-
-    // Re-fetching data after 15 sec of interval
-    setInterval(getData, 15000)
-
     // Pagination
     function pageButtons(pages) {
         var wrapper = document.getElementById('pagination-wrapper')
@@ -114,7 +79,44 @@
 
     }
 
-    pageButtons(jinjaData.total_pages)
+    // Async function call; populating data
+    async function getData() {
+        const response = await fetch(window.origin + "/api/get?page=" + jinjaData.current_page)
+        var data = await response.json();
+        jinjaData.total_pages = data['total_pages']
+        data = data['data']
+        length = data.length;
+        var temp = "";
+
+        for (i = 0; i < length; i++) {
+            const d = new Date(data[i].timestamp);
+
+            temp += "<tr>";
+            if (data[i].action == "PUSH") {
+
+                temp += "<td colspan='5'>" + data[i].author + " pushed to " + data[i].to_branch + " on " + d.toUTCString() + "</td>";
+
+            } else if (data[i].action == "PULL_REQUEST") {
+
+                temp += "<td colspan='5'>" + data[i].author + " submitted a pull request from " + data[i].from_branch + " to ";
+                temp += data[i].to_branch + " on " + d.toUTCString() + "</td>";
+
+            } else {
+
+                temp += "<td colspan='5'>" + data[i].author + " merged " + data[i].from_branch + " to ";
+                temp += data[i].to_branch + " on " + d.toUTCString() + "</td>";
+            }
+        }
+
+        document.getElementById("data").innerHTML = temp;
+
+        pageButtons(jinjaData.total_pages)
+    }
+
+    getData();
+
+    // Re-fetching data after 15 sec of interval
+    setInterval(getData, 15000)
 
 </script>
 
