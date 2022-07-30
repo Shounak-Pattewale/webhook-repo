@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, request, jsonify
 import const as const
 from api.services import GithubData
 
@@ -8,7 +8,8 @@ api = Blueprint('api', __name__, template_folder='templates', static_folder='sta
 @api.get('/get')
 def get():
     try:
-        return GithubData.get()
+        page = request.args.get('page', 1, type=int)
+        return jsonify(GithubData.get(page).items)
     except Exception as error:
         return error
 

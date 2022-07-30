@@ -22,12 +22,21 @@ class GithubData:
     def __init__(self):
         pass
 
-    def get():
-        try:
+    def get(page):
+        # try:
             # Fetching latest entries
-            return jsonify(WebhooksData.objects.order_by('-_id'))
-        except NoAuthorizationError:
-            raise NoAuthorizationError
+            # x = WebhooksData.objects.order_by('-_id').paginate(page=page, per_page=const.records_per_page)
+            # print("Dir =======>>>>>> ",dir(x))
+            # print("Total =======>>>>>> ",x.total)
+            # print("has_next =======>>>>>> ",x.has_next)
+            # print("has_prev =======>>>>>> ",x.has_prev)
+            # print("iterable =======>>>>>> ",x.iterable)
+            # print("next =======>>>>>> ",x.next)
+            # print("next_num =======>>>>>> ",x.next_num)
+            # print("pages =======>>>>>> ",x.pages)
+        return WebhooksData.objects.order_by('-_id').paginate(page=page, per_page=const.records_per_page)
+        # except NoAuthorizationError:
+        #     raise NoAuthorizationError
 
     def put(data, action):
         try:

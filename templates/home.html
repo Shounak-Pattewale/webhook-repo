@@ -3,6 +3,9 @@
 
 {% block main %}
 
+<meta id="my-data" data-current_page="{{page}}" data-total_pages="{{total_pages}}"
+    data-max_btn_length="{{max_btn_length}}">
+
 <div class="container p-4">
     <div class="card">
         <div class="table-responsive card-body">
@@ -19,6 +22,7 @@
             </table>
         </div>
     </div>
+    <div class="card-footer" style="text-align: center;" id="pagination-wrapper"></div>
 </div>
 
 {% endblock %}
@@ -26,9 +30,13 @@
 {% block script %}
 
 <script>
+
+    // Declaring jinja variable
+    var jinjaData = $('#my-data').data();
+
     // Async function call; populating data
     async function getData() {
-        const response = await fetch(window.origin + "/api/get")
+        const response = await fetch(window.origin + "/api/get?page=" + jinjaData.current_page)
         const data = await response.json();
         length = data.length;
         var temp = "";
@@ -38,12 +46,12 @@
 
             temp += "<tr>";
             if (data[i].action == "PUSH") {
-                
-                temp += "<td colspan='5'>" + data[i].author +" pushed to "+ data[i].to_branch + " on " + d.toUTCString() + "</td>";
-   
+
+                temp += "<td colspan='5'>" + data[i].author + " pushed to " + data[i].to_branch + " on " + d.toUTCString() + "</td>";
+
             } else if (data[i].action == "PULL_REQUEST") {
 
-                temp += "<td colspan='5'>" + data[i].author +" submitted a pull request from "+ data[i].from_branch + " to ";
+                temp += "<td colspan='5'>" + data[i].author + " submitted a pull request from " + data[i].from_branch + " to ";
                 temp += data[i].to_branch + " on " + d.toUTCString() + "</td>";
 
             } else {
@@ -60,6 +68,54 @@
 
     // Re-fetching data after 15 sec of interval
     setInterval(getData, 15000)
+
+    // Pagination
+    function pageButtons(pages) {
+        var wrapper = document.getElementById('pagination-wrapper')
+
+        wrapper.innerHTML = ``
+
+        var maxLeft = (jinjaData.current_page - Math.floor(jinjaData.max_btn_length / 2))
+        var maxRight = (jinjaData.current_page + Math.floor(jinjaData.max_btn_length / 2))
+
+        if (maxLeft < 1) {
+            maxLeft = 1
+            maxRight = jinjaData.max_btn_length
+        }
+
+        if (maxRight > pages) {
+            maxLeft = pages - (jinjaData.max_btn_length - 1)
+
+            if (maxLeft < 1) {
+                maxLeft = 1
+            }
+            maxRight = pages
+        }
+
+        for (var page = maxLeft; page <= maxRight; page++) {
+            if (jinjaData.current_page == page) {
+                wrapper.innerHTML += `<a value=${page} class="btn btn-info mx-1" href="?page=${page}">${page}</a>`
+            } else {
+                wrapper.innerHTML += `<a value=${page} class="btn btn-light mx-1" href="?page=${page}">${page}</a>`
+            }
+        }
+
+        if (jinjaData.current_page != 1) {
+            wrapper.innerHTML = `<a value=${1} class="btn btn-light mx-1" href="?page=1">&#171; First</a>` + wrapper.innerHTML
+        } else if (jinjaData.current_page == 1) {
+            wrapper.innerHTML = `<a value=${1} class="btn btn-light mx-1 disabled " href="?page=1">&#171; First</a>` + wrapper.innerHTML
+        }
+
+        if (jinjaData.current_page != pages) {
+            wrapper.innerHTML += `<a value=${pages} class="btn btn-light mx-1" href="?page=${jinjaData.total_pages}">Last &#187;</a>`
+        } else if (jinjaData.current_page == pages) {
+            wrapper.innerHTML += `<a value=${pages} class="btn btn-light mx-1 disabled " href="?page=${jinjaData.total_pages}">Last &#187;</a>`
+        }
+
+    }
+
+    pageButtons(jinjaData.total_pages)
+
 </script>
 
 {% endblock %}
