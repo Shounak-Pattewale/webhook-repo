@@ -1,4 +1,3 @@
-import const as const
 import os
 
 # Default configurations are common across environments

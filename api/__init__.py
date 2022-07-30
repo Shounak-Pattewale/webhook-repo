@@ -1,43 +1,49 @@
-from flask import Blueprint, request, jsonify
 import const as const
+from flask import Blueprint, request, jsonify
 from api.services import GithubData
 
-api = Blueprint('api', __name__, template_folder='templates', static_folder='static', url_prefix='/api')
+api = Blueprint('api', __name__, template_folder='templates',
+                static_folder='static', url_prefix='/api')
 
-# Fetching data from db
+
 @api.get('/get')
 def get():
     try:
         page = request.args.get('page', 1, type=int)
-        res = GithubData.get(page)
-        return jsonify({'data':res.items, 'total_pages':res.pages})
+        pagination = GithubData.get(page)  # receiving pagination object
+
+        return jsonify({
+            'data': pagination.items,
+            'total_pages': pagination.pages
+            })
+
     except Exception as error:
         return error
 
-# Webhook endpoint for Push Action
-@api.post("/github_push")
+
+@api.post("/github_push")  # webhook endpoint for Push action
 def github_push():
     try:
-        if request.headers['Content-Type']=='application/json':
-
+        if request.headers['Content-Type'] == 'application/json':
             data = request.json
 
             return GithubData.put(data, 'PUSH')
-        return {'Response' : 'Bad Request'},const.status_badrequest_400
+
+        return {'Response': 'Bad Request'}, const.STATUS_BADREQUEST_400
 
     except Exception as error:
         return error
 
-# Webhook endpoint for Pull Request Action
-@api.post("/github_pull_request")
+
+@api.post("/github_pull_request")  # webhook endpoint for Pull Request action
 def github_pull_request():
     try:
-        if request.headers['Content-Type']=='application/json':
-
+        if request.headers['Content-Type'] == 'application/json':
             data = request.json
 
             return GithubData.put(data, 'PULL_REQUEST')
-        return {'Response' : 'Bad Request'},const.status_badrequest_400
-    
+
+        return {'Response': 'Bad Request'}, const.STATUS_BADREQUEST_400
+
     except Exception as error:
         return error

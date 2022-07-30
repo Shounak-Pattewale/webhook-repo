@@ -1,25 +1,29 @@
 import const as const
 
+
 class InternalServerError(Exception):
     pass
+
 
 class SchemaValidationError(Exception):
     pass
 
+
 class NoAuthorizationError(Exception):
     pass
 
+
 basic_errors = {
     "InternalServerError": {
-        const.response_message_key: "Something went wrong",
-        const.response_status_key: const.status_internal_server_error_500
+        const.RESPONSE_MESSAGE_KEY: "Something went wrong",
+        const.RESPONSE_STATUS_KEY: const.STATUS_INTERNAL_SERVER_ERROR_500
     },
     "SchemaValidationError": {
-        const.response_message_key: "Request is missing required fields",
-        const.response_status_key: const.status_badrequest_400
+        const.RESPONSE_MESSAGE_KEY: "Request is missing required fields",
+        const.RESPONSE_STATUS_KEY: const.STATUS_BADREQUEST_400
     },
     "NoAuthorizationError": {
-        const.response_message_key: "Missing Authorization",
-        const.response_status_key: const.status_unauthorized_401
+        const.RESPONSE_MESSAGE_KEY: "Missing Authorization",
+        const.RESPONSE_STATUS_KEY: const.STATUS_UNAUTHORIZED_401
     }
 }

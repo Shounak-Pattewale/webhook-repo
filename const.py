@@ -1,29 +1,29 @@
 import os
 
 # environments
-flask_env_dev = "development"
-flask_env_testing = "testing"
-flask_env_production = "production"
+FLASK_ENV_DEV = "development"
+FLASK_ENV_TESTING = "testing"
+FLASK_ENV_PRODUCTION = "production"
 
 # response message key
-response_message_key = "message"
-response_status_key = "status"
+RESPONSE_MESSAGE_KEY = "message"
+RESPONSE_STATUS_KEY = "status"
 
 # HTTP response statuses codes
 
 # successful responses - 2xx
-status_ok_200 = 200
-status_created_201 = 201
+STATUS_OK_200 = 200
+STATUS_CREATED_201 = 201
 
 # client side errors - 4xx
-status_badrequest_400 = 400
-status_unauthorized_401 = 401
-status_already_exists_403 = 403
-status_notfound_404 = 404
+STATUS_BADREQUEST_400 = 400
+STATUS_UNAUTHORIZED_401 = 401
+STATUS_ALREADY_EXISTS_403 = 403
+STATUS_NOTFOUND_404 = 404
 
 # server side errors
-status_internal_server_error_500 = 500
+STATUS_INTERNAL_SERVER_ERROR_500 = 500
 
 # pagination
-records_per_page = int(os.environ.get('RECORDS_PER_PAGE'))
-pagination_btn_length = int(os.environ.get('PAGINATION_BTN_LENGTH'))
+RECORDS_PER_PAGE = int(os.environ.get('RECORDS_PER_PAGE'))
+PAGINATION_BTN_LENGTH = int(os.environ.get('PAGINATION_BTN_LENGTH'))
