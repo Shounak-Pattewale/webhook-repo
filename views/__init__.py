@@ -10,11 +10,9 @@ views = Blueprint('views', __name__,
 def home():
     try:
         page = request.args.get('page', 1, type=int)
-        pagination = GithubData.get(page)  # receiving pagination object
 
-        return render_template('home.html', page=page, 
-                                total_pages=pagination.pages, 
-                                max_btn_length=const.PAGINATION_BTN_LENGTH)
+        return render_template('home.html', page=page,
+                               max_btn_length=const.PAGINATION_BTN_LENGTH)
 
     except Exception as error:
         return error
@@ -24,11 +22,9 @@ def home():
 def table():
     try:
         page = request.args.get('page', 1, type=int)
-        pagination = GithubData.get(page)  # receiving pagination object
 
-        return render_template('table.html', page=page, 
-                                total_pages=pagination.pages, 
-                                max_btn_length=const.PAGINATION_BTN_LENGTH)
+        return render_template('table.html', page=page,
+                               max_btn_length=const.PAGINATION_BTN_LENGTH)
 
     except Exception as error:
         return error

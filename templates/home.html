@@ -3,8 +3,7 @@
 
 {% block main %}
 
-<meta id="my-data" data-current_page="{{page}}" data-total_pages="{{total_pages}}"
-    data-max_btn_length="{{max_btn_length}}">
+<meta id="my-data" data-current_page="{{page}}" data-max_btn_length="{{max_btn_length}}">
 
 <div class="container p-4">
     <div class="card">
@@ -72,9 +71,9 @@
         }
 
         if (jinjaData.current_page != pages) {
-            wrapper.innerHTML += `<a value=${pages} class="btn btn-light mx-1" href="?page=${jinjaData.total_pages}">Last &#187;</a>`
+            wrapper.innerHTML += `<a value=${pages} class="btn btn-light mx-1" href="?page=${pages}">Last &#187;</a>`
         } else if (jinjaData.current_page == pages) {
-            wrapper.innerHTML += `<a value=${pages} class="btn btn-light mx-1 disabled " href="?page=${jinjaData.total_pages}">Last &#187;</a>`
+            wrapper.innerHTML += `<a value=${pages} class="btn btn-light mx-1 disabled " href="?page=${pages}">Last &#187;</a>`
         }
 
     }
@@ -83,7 +82,7 @@
     async function getData() {
         const response = await fetch(window.origin + "/api/get?page=" + jinjaData.current_page)
         var data = await response.json();
-        jinjaData.total_pages = data['total_pages']
+        total_pages = data['total_pages']
         data = data['data']
         length = data.length;
         var temp = "";
@@ -110,7 +109,7 @@
 
         document.getElementById("data").innerHTML = temp;
 
-        pageButtons(jinjaData.total_pages)
+        pageButtons(total_pages)
     }
 
     getData();
